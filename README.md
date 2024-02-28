@@ -1,7 +1,8 @@
-Run these commands before starting the script for the first time:
+Run this command before starting the script for the first time:
 
-pip install requests
+pip install -r requirements.txt
 
-pip install pandas
+or 
 
-pip install pwinput
+python3 -m "pip" install -r requirements.txt
+
