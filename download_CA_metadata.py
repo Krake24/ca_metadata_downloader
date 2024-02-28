@@ -75,11 +75,11 @@ print("fetching crystal data")
 items = getData("crystals")
 crystals = getAttributes(items)
 
-values=["Rarity", "Size", "Glow", "House", "Prism", "Essence", "Modifier", "Crystal 1 Size", "Crystal 2 Size", "Crystal 3 Size", "Crystal 4 Size"]
-df = pandas.DataFrame(crystals).rename(columns={"Number of Crystals" : "Size", "Crystal Prism" : "Prism", "Essence Value" : "Essence"})
+values=["Rarity", "Size", "Glow", "House", "Essence", "Modifier", "Crystal 1 Size", "Crystal 2 Size", "Crystal 3 Size", "Crystal 4 Size"]
+df = pandas.DataFrame(crystals).rename(columns={"Number of Crystals" : "Size", "Essence Value" : "Essence"})
 for cs in ["Crystal 2 Size", "Crystal 3 Size", "Crystal 4 Size"]: 
   df[cs] = df[cs].replace("None", "")
-df[values].sort_values(values).to_csv("crystals.csv", index=False)
+df[values].sort_values(["Size", "Essence"], ascending=False, key=pandas.to_numeric).to_csv("crystals.csv", index=False)
 print("monster parts data written to crystals.csv")
 
 print("fetching pet data")
@@ -121,7 +121,7 @@ if gladiators:
   df = pandas.DataFrame(gladiators).rename(columns={"tokenId" : "ID", "essence" : "Essence", "totalEssence" : "Total Essence", "level" : "Level", "xp" : "XP", "isDead": "Status", "Core Essence" : "Essence"})
   df["Status"] = df["Status"].replace("False", "Alive")
   df["Status"] = df["Status"].replace("True", "Dead")
-  df[values].sort_values(["XP", "Purity"], ascending=False).to_csv("gladiators.csv", index=False)
+  df[values].sort_values(["Rating", "XP", "Purity"], ascending=False).to_csv("gladiators.csv", index=False)
   print("champion data written to gladiators.csv")
 
 if challengers:
@@ -129,13 +129,13 @@ if challengers:
   df = pandas.DataFrame(challengers).rename(columns={"tokenId" : "ID", "essence" : "Essence", "totalEssence" : "Total Essence", "level" : "Level", "xp" : "XP", "isDead": "Status", "Core Essence" : "Essence"})
   df["Status"] = df["Status"].replace("False", "Alive")
   df["Status"] = df["Status"].replace("True", "Dead")
-  df[values].sort_values(["XP", "Purity"], ascending=False).to_csv("challengers.csv", index=False)
+  df[values].sort_values(["Rating", "XP", "Purity"], ascending=False).to_csv("challengers.csv", index=False)
   print("champion data written to challengers.csv")
 
 if grunts:
-  values=["ID",  "Level", "XP", "Family", "Essence", "Rarity", "Guaranteed Fangs", "Guaranteed Tail", "Guaranteed Wings", "Guaranteed Warpaint", "Guaranteed Horns", "Guaranteed Claws", "House Affinity", "Total Essence", "Status", "Rating", "Class","Piercing","Hairstyle"]
-  df = pandas.DataFrame(grunts).rename(columns={"tokenId" : "ID", "essence" : "Essence", "totalEssence" : "Total Essence", "level" : "Level", "xp" : "XP", "isDead": "Status", "Core Essence" : "Essence"})
-  df["Status"] = df["Status"].replace("False", "Alive")
-  df["Status"] = df["Status"].replace("True", "Dead")
+  values=["ID",  "Level", "XP", "Family", "Essence", "Rarity", "Fangs", "Tail", "Wings", "Warpaint", "Horns", "Claws", "House Affinity", "Total Essence", "Status", "Rating", "Class","Piercing","Hairstyle"]
+  df = pandas.DataFrame(grunts).rename(columns={"tokenId" : "ID", "essence" : "Essence", "totalEssence" : "Total Essence", "level" : "Level", "xp" : "XP", "isDead": "Status", "Guaranteed Fangs" : "Fangs", "Guaranteed Tail" : "Tail", "Guaranteed Wings" : "Wings", "Guaranteed Warpaint" : "Warpaint", "Guaranteed Horns" : "Horns", "Guaranteed Claws" : "Claws",})
+  df["Status"] = df["Status"].replace("FALSE", "Alive")
+  df["Status"] = df["Status"].replace("TRUE", "Dead")
   df[values].sort_values(["Rarity"], ascending=False).to_csv("grunts.csv", index=False)
   print("champion data written to champions.csv")

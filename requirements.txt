@@ -1,0 +1,3 @@
+pandas==1.4.2
+pwinput==1.0.3
+Requests==2.31.0
