@@ -47,49 +47,54 @@ print("fetching scroll data")
 items = getData("ascensionScrolls")
 scrolls = getAttributes(items)
 
-values=["Tier","Inscription"]
-df = pandas.DataFrame(scrolls) 
-df.groupby(values).size().to_frame('Count').reset_index().sort_values(["Tier", "Count"], ascending=False).to_csv("scrolls.csv", index=False)
-print("scroll data written to scrolls.csv")
+if scrolls:
+  values=["Tier","Inscription"]
+  df = pandas.DataFrame(scrolls) 
+  df.groupby(values).size().to_frame('Count').reset_index().sort_values(["Tier", "Count"], ascending=False).to_csv("scrolls.csv", index=False)
+  print("scroll data written to scrolls.csv")
 
 print("fetching gallery data")
 items = getData("imperialGallery")
 gallery = getAttributes(items, ["tokenName"])
 
-df = pandas.DataFrame(gallery).rename(columns={"tokenName" : "Name"})
-df['Name'] = df['Name'].replace('(.*?)\w\d*/\d*', r"\1", regex=True)
-df = df.groupby(["Name", "Category", "Collection"]).size().to_frame('Count')
-df.reset_index().sort_values("Count", ascending=False).to_csv("gallery.csv", index=False)
-print("gallery data written to gallery.csv")
+if gallery:
+  df = pandas.DataFrame(gallery).rename(columns={"tokenName" : "Name"})
+  df['Name'] = df['Name'].replace('(.*?)\w\d*/\d*', r"\1", regex=True)
+  df = df.groupby(["Name", "Category", "Collection"]).size().to_frame('Count')
+  df.reset_index().sort_values("Count", ascending=False).to_csv("gallery.csv", index=False)
+  print("gallery data written to gallery.csv")
 
 print("fetching monster parts data")
 items = getData("monstrousCompendium")
 monster_parts = getAttributes(items)
 
-values=["Rarity", "Piece", "Type", "Collection"]
-df = pandas.DataFrame(monster_parts) 
-df.groupby(values).size().to_frame('Count').reset_index().sort_values(values).to_csv("monster_parts.csv", index=False)
-print("monster parts data written to monster_parts.csv")
+if monster_parts:
+  values=["Rarity", "Piece", "Type", "Collection"]
+  df = pandas.DataFrame(monster_parts) 
+  df.groupby(values).size().to_frame('Count').reset_index().sort_values(values).to_csv("monster_parts.csv", index=False)
+  print("monster parts data written to monster_parts.csv")
 
-print("fetching crystal data")
-items = getData("crystals")
-crystals = getAttributes(items)
+  print("fetching crystal data")
+  items = getData("crystals")
+  crystals = getAttributes(items)
 
-values=["Rarity", "Size", "Glow", "House", "Essence", "Modifier", "Crystal 1 Size", "Crystal 2 Size", "Crystal 3 Size", "Crystal 4 Size"]
-df = pandas.DataFrame(crystals).rename(columns={"Number of Crystals" : "Size", "Essence Value" : "Essence"})
-for cs in ["Crystal 2 Size", "Crystal 3 Size", "Crystal 4 Size"]: 
-  df[cs] = df[cs].replace("None", "")
-df[values].sort_values(["Size", "Essence"], ascending=False, key=pandas.to_numeric).to_csv("crystals.csv", index=False)
-print("monster parts data written to crystals.csv")
+if crystals:
+  values=["Rarity", "Size", "Glow", "House", "Essence", "Modifier", "Crystal 1 Size", "Crystal 2 Size", "Crystal 3 Size", "Crystal 4 Size"]
+  df = pandas.DataFrame(crystals).rename(columns={"Number of Crystals" : "Size", "Essence Value" : "Essence"})
+  for cs in ["Crystal 2 Size", "Crystal 3 Size", "Crystal 4 Size"]: 
+    df[cs] = df[cs].replace("None", "")
+  df[values].sort_values(["Size", "Essence"], ascending=False, key=pandas.to_numeric).to_csv("crystals.csv", index=False)
+  print("monster parts data written to crystals.csv")
 
 print("fetching pet data")
 items = getData("pets")
 pets = getAttributes(items, ["tokenId"])
 
-values=["ID", "Family","Edition", "Favorite Family", "House Banner","Personality","Favorite Toy","Favorite Food"]
-df = pandas.DataFrame(pets).rename(columns={"tokenId" : "ID"})
-df[values].sort_values(["ID"], key=pandas.to_numeric).to_csv("pets.csv", index=False)
-print("pet data written to pets.csv")
+if pets:
+  values=["ID", "Family","Edition", "Favorite Family", "House Banner","Personality","Favorite Toy","Favorite Food"]
+  df = pandas.DataFrame(pets).rename(columns={"tokenId" : "ID"})
+  df[values].sort_values(["ID"], key=pandas.to_numeric).to_csv("pets.csv", index=False)
+  print("pet data written to pets.csv")
 
 print("fetching champion data")
 items = getData("allChampions")
